@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -21,16 +20,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.metehanbolat.uistructurecompose.R
+import com.metehanbolat.uistructurecompose.navigation.GraphScreens
 import com.metehanbolat.uistructurecompose.ui.theme.primaryColor
 
 @Composable
-fun LoginPage() {
+fun LoginPage(navController: NavController) {
 
     val emailValue = remember { mutableStateOf("") }
     val passwordValue = remember { mutableStateOf("") }
     val passwordVisibility = remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -107,7 +108,12 @@ fun LoginPage() {
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
                         text = stringResource(id = R.string.create_an_account),
-                        modifier = Modifier.clickable { }
+                        modifier = Modifier.clickable {
+                            navController.navigate(GraphScreens.REGISTER.pageName) {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        }
                     )
                     Spacer(modifier = Modifier.padding(20.dp))
                 }
@@ -119,5 +125,5 @@ fun LoginPage() {
 @Preview
 @Composable
 fun LoginPagePreview() {
-    LoginPage()
+    LoginPage(rememberNavController())
 }

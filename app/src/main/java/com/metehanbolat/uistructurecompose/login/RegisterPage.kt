@@ -24,12 +24,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.metehanbolat.uistructurecompose.R
+import com.metehanbolat.uistructurecompose.navigation.GraphScreens
 import com.metehanbolat.uistructurecompose.ui.theme.primaryColor
 import com.metehanbolat.uistructurecompose.ui.theme.whiteBackground
 
 @Composable
-fun RegisterPage() {
+fun RegisterPage(navController: NavController) {
 
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
@@ -167,7 +170,12 @@ fun RegisterPage() {
                         Text(
                             text = stringResource(id = R.string.login_instead),
                             modifier = Modifier
-                                .clickable {  }
+                                .clickable {
+                                    navController.navigate(GraphScreens.LOGIN.pageName) {
+                                        popUpTo(navController.graph.startDestinationId)
+                                        launchSingleTop = true
+                                    }
+                                }
                         )
 
                         Spacer(modifier = Modifier.padding(20.dp))
@@ -181,5 +189,5 @@ fun RegisterPage() {
 @Preview
 @Composable
 fun RegisterPagePreview() {
-    RegisterPage()
+    RegisterPage(rememberNavController())
 }
