@@ -18,13 +18,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AnimatedHeart() {
+
     var isVisible by remember { mutableStateOf(false) }
 
     Button(onClick = { isVisible = !isVisible }) {
         Text(text = if (isVisible) "Hide" else "Show")
     }
     Spacer(modifier = Modifier.size(150.dp))
-
     AnimatedVisibility(
         visible = isVisible,
         exit = fadeOut(animationSpec = tween(1000, easing = LinearEasing)),
