@@ -1,5 +1,6 @@
 package com.metehanbolat.uistructurecompose.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +36,7 @@ import kotlinx.coroutines.delay
 
 fun getTextList(): List<MutableState<TextFieldValue>> = textList
 fun getRequesterList(): List<FocusRequester> = requesterList
+const val TEST_VERIFY_CODE = "1234"
 
 private val textList = listOf(
     mutableStateOf(TextFieldValue(text = "", selection = TextRange(0))),
@@ -92,6 +94,21 @@ fun OtpView(
                                 text = newValue.text,
                                 selection = TextRange(newValue.text.length)
                             )
+                            connectInputtedCode {
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                                if (it) {
+                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "Error, Again!", Toast.LENGTH_SHORT).show()
+                                    for (text in textList) {
+                                        text.value = TextFieldValue(
+                                            text = "",
+                                            selection = TextRange(0)
+                                        )
+                                    }
+                                }
+                            }
                             nextFocus()
                         },
                         focusRequester = requesterList[i]
@@ -105,6 +122,41 @@ fun OtpView(
         delay(300)
         requesterList[0].requestFocus()
     })
+}
+
+private fun connectInputtedCode(
+    textList: List<MutableState<TextFieldValue>> = getTextList(),
+    onVerifyCode: ((success: Boolean) -> Unit)? = null
+) {
+    var code = ""
+    for (text in textList) {
+        code += text.value.text
+    }
+
+    if (code.length == 4) {
+        verifyCode(
+            code,
+            onSuccess = {
+                onVerifyCode?.let {
+                    it(true)
+                }
+            },
+            onError = {
+                onVerifyCode?.let {
+                    it(false)
+                }
+            }
+        )
+    }
+
+}
+
+private fun verifyCode(code: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    if (code == TEST_VERIFY_CODE) {
+        onSuccess()
+    } else {
+        onError()
+    }
 }
 
 private fun nextFocus(
@@ -138,7 +190,7 @@ fun InputView(
             .wrapContentSize()
             .focusRequester(focusRequester),
         maxLines = 1,
-        decorationBox = { innerTextField -> 
+        decorationBox = { innerTextField ->
             Box(
                 modifier = Modifier
                     .width(50.dp)
@@ -155,7 +207,10 @@ fun InputView(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
         keyboardActions = KeyboardActions(onDone = null)
     )
 }
