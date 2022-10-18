@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 
 fun getTextList(): List<MutableState<TextFieldValue>> = textList
+fun getRequesterList(): List<FocusRequester> = requesterList
 
 private val textList = listOf(
     mutableStateOf(TextFieldValue(text = "", selection = TextRange(0))),
@@ -42,7 +43,7 @@ private val textList = listOf(
     mutableStateOf(TextFieldValue(text = "", selection = TextRange(0)))
 )
 
-private val requestList = listOf(
+private val requesterList = listOf(
     FocusRequester(),
     FocusRequester(),
     FocusRequester(),
@@ -53,7 +54,7 @@ private val requestList = listOf(
 @Composable
 fun OtpView(
     textList: List<MutableState<TextFieldValue>> = getTextList(),
-    requesterList: List<FocusRequester> = requestList
+    requesterList: List<FocusRequester> = getRequesterList()
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -78,7 +79,20 @@ fun OtpView(
                     InputView(
                         value = textList[i].value,
                         onValueChange = { newValue ->
-
+                            if (textList[i].value.text != "") {
+                                if (newValue.text == "") {
+                                    textList[i].value = TextFieldValue(
+                                        text = "",
+                                        selection = TextRange(0)
+                                    )
+                                }
+                                return@InputView
+                            }
+                            textList[i].value = TextFieldValue(
+                                text = newValue.text,
+                                selection = TextRange(newValue.text.length)
+                            )
+                            nextFocus()
                         },
                         focusRequester = requesterList[i]
                     )
@@ -91,6 +105,20 @@ fun OtpView(
         delay(300)
         requesterList[0].requestFocus()
     })
+}
+
+private fun nextFocus(
+    textList: List<MutableState<TextFieldValue>> = getTextList(),
+    requesterList: List<FocusRequester> = getRequesterList()
+) {
+    for (index in textList.indices) {
+        if (textList[index].value.text == "") {
+            if (index < textList.size) {
+                requesterList[index].requestFocus()
+                break
+            }
+        }
+    }
 }
 
 @Composable
