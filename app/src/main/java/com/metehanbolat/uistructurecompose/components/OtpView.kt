@@ -6,16 +6,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +31,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 
 fun getTextList(): List<MutableState<TextFieldValue>> = textList
 
@@ -41,6 +48,50 @@ private val requestList = listOf(
     FocusRequester(),
     FocusRequester()
 )
+
+@ExperimentalComposeUiApi
+@Composable
+fun OtpView(
+    textList: List<MutableState<TextFieldValue>> = getTextList(),
+    requesterList: List<FocusRequester> = requestList
+) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = Color.DarkGray
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 50.dp)
+                    .align(Alignment.TopCenter)
+            ) {
+                for (i in textList.indices) {
+                    InputView(
+                        value = textList[i].value,
+                        onValueChange = { newValue ->
+
+                        },
+                        focusRequester = requesterList[i]
+                    )
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = null, block = {
+        delay(300)
+        requesterList[0].requestFocus()
+    })
+}
 
 @Composable
 fun InputView(
