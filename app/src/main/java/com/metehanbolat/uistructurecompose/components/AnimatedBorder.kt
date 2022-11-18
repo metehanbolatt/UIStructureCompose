@@ -6,12 +6,11 @@ import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -19,6 +18,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
@@ -64,8 +65,35 @@ fun AnimatedBorderCard(
     }
 }
 
-
 private val shineColors = listOf(
     Color.White,
     Color(0xFFE91E63),
 )
+
+@ReferenceDevices
+@Composable
+fun AnimatedBorderPreview() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedBorderCard(
+            modifier = Modifier.size(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "Metehan")
+                Text(text = "Metehan")
+                Text(text = "Metehan")
+            }
+        }
+    }
+}
+
+@Preview(name = "phone", device = Devices.PHONE, showBackground = true)
+@Preview(name = "foldable", device = Devices.FOLDABLE, showBackground = true)
+@Preview(name = "desktop", device = Devices.DESKTOP, showBackground = true)
+annotation class ReferenceDevices
