@@ -1,5 +1,6 @@
 package com.metehanbolat.uistructurecompose.components.rainbowcircle
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -19,15 +20,18 @@ import androidx.compose.ui.unit.dp
 import com.metehanbolat.uistructurecompose.R
 
 @Composable
-fun RainbowCircle() {
+fun RainbowCircle(
+    @DrawableRes image: Int,
+    modifier: Modifier = Modifier
+) {
     val rainbowColorsBrush = remember { Brush.sweepGradient(colorList) }
     val borderWidth = 4.dp
 
     Image(
-        painter = painterResource(id = R.drawable.lion),
+        painter = painterResource(id = image),
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        modifier = Modifier
+        modifier = modifier
             .size(150.dp)
             .border(
                 BorderStroke(borderWidth, rainbowColorsBrush),
@@ -41,16 +45,24 @@ fun RainbowCircle() {
 @Preview
 @Composable
 fun RainbowCirclePreview() {
-    RainbowCircle()
+    RainbowCircle(R.drawable.avatar)
 }
 
+val purple = Color(0xFF9575CD)
+val pink = Color(0xFFBA68C8)
+val red = Color(0xFFE57373)
+val orange = Color(0xFFFFB74D)
+val yellow = Color(0xFFFFF176)
+val green = Color(0xFFAED581)
+val blue = Color(0xFF4DD0E1)
+
 var colorList = listOf(
-    Color(0xFF9575CD),
-    Color(0xFFBA68C8),
-    Color(0xFFE57373),
-    Color(0xFFFFB74D),
-    Color(0xFFFFF176),
-    Color(0xFFAED581),
-    Color(0xFF4DD0E1),
-    Color(0xFF9575CD)
+    purple,
+    pink,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    purple
 )
