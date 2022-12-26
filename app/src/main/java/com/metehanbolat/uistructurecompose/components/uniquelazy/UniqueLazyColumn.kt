@@ -1,12 +1,18 @@
 package com.metehanbolat.uistructurecompose.components.uniquelazy
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun UniqueLazyScreen() {
@@ -43,6 +49,38 @@ fun UniqueLazyScreen() {
         }
     }
 
+}
+
+@ExperimentalFoundationApi
+@Preview(showBackground = true)
+@Composable
+fun LazyTest() {
+    val sections = listOf("Vadeli Hesaplar", "Vadesiz Hesaplar", "Altın Hesapları", "Döviz Hesapları")
+    LazyColumn(
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        sections.forEach { section ->
+            stickyHeader {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Green)
+                        .wrapContentWidth()
+                        .padding(12.dp),
+                    text = section,
+                )
+            }
+            items(10) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        modifier = Modifier.padding(12.dp),
+                        text = "$section: Hesap $it"
+                    )
+                }
+            }
+        }
+    }
 }
 
 data class Item(
