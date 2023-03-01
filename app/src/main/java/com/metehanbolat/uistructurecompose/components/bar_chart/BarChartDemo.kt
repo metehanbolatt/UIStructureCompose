@@ -27,8 +27,7 @@ fun BarChartDemo() {
             values.forEach { value ->
                 CustomBar(
                     size = value,
-                    max = values.maxOrNull()!!.value,
-                    modifier = Modifier.weight(1f)
+                    max = values.maxOrNull()!!.value
                 )
             }
         }
