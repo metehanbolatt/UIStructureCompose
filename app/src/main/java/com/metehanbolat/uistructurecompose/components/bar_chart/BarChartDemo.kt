@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 fun BarChartDemo() {
 
     val values = mutableListOf(50.dp, 200.dp, 160.dp, 300.dp, 120.dp, 200.dp, 140.dp)
-    val labels = listOf("Mon", "Sun", "Thue", "Wed", "Thu", "Fri", "Sat")
+    val labels = listOf("Sun", "Mon", "Thue", "Wed", "Thu", "Fri", "Sat")
 
     Column(
         modifier = Modifier.background(Color.LightGray)

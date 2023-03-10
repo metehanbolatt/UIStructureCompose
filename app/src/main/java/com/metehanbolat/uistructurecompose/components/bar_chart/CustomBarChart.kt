@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -44,7 +43,7 @@ fun RowScope.CustomBar(
             .weight(1f)
             .border(BorderStroke(1.dp, Color.Black))
             .background(Color.Red.copy(alpha = heightAnimate.value / max))
-            .clickable(role = Role.Button, onClickLabel = "Graphic Item") {
+            .clickable {
                 Toast
                     .makeText(context, "Value: $heightAnimate", Toast.LENGTH_SHORT)
                     .show()
